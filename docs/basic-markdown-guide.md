@@ -1,17 +1,3 @@
----
-title: Basic writing and formatting syntax
-intro: Create sophisticated formatting for your prose and code on GitHub with simple syntax.
-redirect_from:
-  - /articles/basic-writing-and-formatting-syntax
-  - /github/writing-on-github/basic-writing-and-formatting-syntax
-  - /github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
-versions:
-  fpt: '*'
-  ghes: '*'
-  ghae: '*'
-  ghec: '*'
-shortTitle: Basic formatting syntax
----
 ## Headings
 
 To create a heading, add one to six <kbd>#</kbd> symbols before your heading text. The number of <kbd>#</kbd> you use will determine the size of the heading.

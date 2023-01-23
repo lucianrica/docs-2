@@ -75,6 +75,25 @@ These elements extend the basic syntax by adding additional features. Not all Ma
 }
 ```
 
+```javascript
+import { Link, Outlet } from "react-router-dom";
+
+
+const BlogPage = () => {
+    return (
+        <div>
+            <nav>
+                <Link to="me">My Blog Page</Link>
+            </nav>
+
+            <Outlet />
+        </div>
+    )
+}
+
+export default BlogPage
+```
+
 ### Footnote
 
 Here's a sentence with a footnote. [^1]

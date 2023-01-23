@@ -1,371 +1,409 @@
-## Headings
+---
+title: Forming calls with GraphQL
+intro: 'Learn how to authenticate to the GraphQL API, then learn how to create and run queries and mutations.'
+redirect_from:
+  - /v4/guides/forming-calls
+  - /graphql/guides/forming-calls
+versions:
+  fpt: '*'
+  ghec: '*'
+  ghes: '*'
+  ghae: '*'
+topics:
+  - API
+shortTitle: Form calls with GraphQL
+---
 
-To create a heading, add one to six <kbd>#</kbd> symbols before your heading text. The number of <kbd>#</kbd> you use will determine the size of the heading.
-
-```markdown
-# The largest heading
-## The second largest heading
-###### The smallest heading
-```
-
-![Rendered H1, H2, and H6 headings](/assets/images/help/writing/headings-rendered.png)
-
-When you use two or more headings, GitHub automatically generates a table of contents which you can access by clicking {% octicon "list-unordered" aria-label="The unordered list icon" %} within the file header. Each heading title is listed in the table of contents and you can click a title to navigate to the selected section. 
-
-![Screenshot highlighting the table of contents icon](/assets/images/help/repository/headings_toc.png)
-
-## Styling text
-
-You can indicate emphasis with bold, italic, strikethrough, subscript, or superscript text in comment fields and `.md` files.  
-
-| Style | Syntax | Keyboard shortcut | Example | Output |
-| --- | --- | --- | --- | --- |
-| Bold | `** **` or `__ __`| <kbd>Command</kbd>+<kbd>B</kbd> (Mac) or <kbd>Ctrl</kbd>+<kbd>B</kbd> (Windows/Linux) | `**This is bold text**` | **This is bold text** |
-| Italic | `* *` or `_ _`     | <kbd>Command</kbd>+<kbd>I</kbd> (Mac) or <kbd>Ctrl</kbd>+<kbd>I</kbd> (Windows/Linux) | `*This text is italicized*` | *This text is italicized* |
-| Strikethrough | `~~ ~~` | | `~~This was mistaken text~~` | ~~This was mistaken text~~ |
-| Bold and nested italic | `** **` and `_ _` | | `**This text is _extremely_ important**` | **This text is _extremely_ important** |
-| All bold and italic | `*** ***` | | `***All this text is important***` | ***All this text is important*** |
-| Subscript | `<sub> </sub>` | | `<sub>This is a subscript text</sub>` | <sub>This is a subscript text</sub> |
-| Superscript | `<sup> </sup>` | | `<sup>This is a superscript text</sup>` | <sup>This is a superscript text</sup> |
-
-## Quoting text
-
-You can quote text with a <kbd>></kbd>.
-
-```markdown
-Text that is not a quote
-
-> Text that is a quote
-```
-
-![Rendered quoted text](/assets/images/help/writing/quoted-text-rendered.png)
-
-{% tip %}
-
-**Tip:** When viewing a conversation, you can automatically quote text in a comment by highlighting the text, then typing <kbd>R</kbd>. You can quote an entire comment by clicking {% octicon "kebab-horizontal" aria-label="The horizontal kebab icon" %}, then **Quote reply**. For more information about keyboard shortcuts, see "[Keyboard shortcuts](/articles/keyboard-shortcuts/)."
-
-{% endtip %}
-
-## Quoting code
-
-You can call out code or a command within a sentence with single backticks. The text within the backticks will not be formatted. You can also press the <kbd>Command</kbd>+<kbd>E</kbd> (Mac) or <kbd>Ctrl</kbd>+<kbd>E</kbd> (Windows/Linux) keyboard shortcut to insert the backticks for a code block within a line of Markdown.
-
-```markdown
-Use `git status` to list all new or modified files that haven't yet been committed.
-```
-
-![Rendered inline code block](/assets/images/help/writing/inline-code-rendered.png)
-
-To format code or text into its own distinct block, use triple backticks.
-
-<pre>
-Some basic Git commands are:
-```
-git status
-git add
-git commit
-```
-</pre>
-
-![Rendered code block](/assets/images/help/writing/code-block-rendered.png)
-
-For more information, see "[Creating and highlighting code blocks](/articles/creating-and-highlighting-code-blocks)."
-
-{% data reusables.user-settings.enabling-fixed-width-fonts %}
-
-## Supported color models
-
-In issues, pull requests, and discussions, you can call out colors within a sentence by using backticks. A supported color model within backticks will display a visualization of the color.
-
-```markdown
-The background color should be `#ffffff` for light mode and `#0d1117` for dark mode.
-```
-
-![Rendered supported color model.](/assets/images/help/writing/supported-color-models-rendered.png)
-
-Here are the currently supported color models.
-
-| Color | Syntax | Example | Output |
-| --- | --- | --- | --- |
-| HEX | <code>\`#RRGGBB\`</code> | <code>\`#0969DA\`</code> | ![Rendered supported color model in HEX format.](/assets/images/help/writing/supported-color-models-hex-rendered.png) |
-| RGB | <code>\`rgb(R,G,B)\`</code> | <code>\`rgb(9, 105, 218)\`</code> | ![Rendered supported color model in RGB format.](/assets/images/help/writing/supported-color-models-rgb-rendered.png) |
-| HSL | <code>\`hsl(H,S,L)\`</code> | <code>\`hsl(212, 92%, 45%)\`</code> | ![Rendered supported color model in HSL format.](/assets/images/help/writing/supported-color-models-hsl-rendered.png) |
+## Authenticating with GraphQL
 
 {% note %}
 
-**Notes:**
-
-- A supported color model cannot have any leading or trailing spaces within the backticks.
-- The visualization of the color is only supported in issues, pull requests, and discussions.
+**Note**: You need to create a {% data variables.product.pat_v1 %}, {% data variables.product.prodname_github_app %}, or {% data variables.product.prodname_oauth_app %} to authenticate to the GraphQL API. The GraphQL API does not support authentication with {% data variables.product.pat_v2 %}s.
 
 {% endnote %}
 
-## Links
 
-You can create an inline link by wrapping link text in brackets `[ ]`, and then wrapping the URL in parentheses `( )`. You can also use the keyboard shortcut <kbd>Command</kbd>+<kbd>K</kbd> to create a link.{% ifversion fpt or ghae > 3.3 or ghes > 3.3 or ghec %} When you have text selected, you can paste a URL from your clipboard to automatically create a link from the selection.{% endif %}
+### Authenticating with a {% data variables.product.pat_v1_caps %}
 
-{% ifversion fpt or ghae > 3.5 or ghes > 3.5 or ghec %} You can also create a Markdown hyperlink by highlighting the text and using the keyboard shortcut <kbd>Command</kbd>+<kbd>V</kbd>. If you'd like to replace the text with the link, use the keyboard shortcut <kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>.{% endif %}
+To authenticate with a {% data variables.product.pat_generic %}, follow the steps in "[Creating a {% data variables.product.pat_generic %}](/github/authenticating-to-github/creating-a-personal-access-token)" to create a {% data variables.product.pat_v1 %}. The data that you are requesting will dictate which scopes you will need. For example, select the "read:user" scope to request data about users. Select the "public_repo" scope to request data about public repositories.
 
-`This site was built using [GitHub Pages](https://pages.github.com/).`
+If your token does not have the required scopes to access a resource, the API will return an error message that states what scopes your token needs.
 
-![Rendered link](/assets/images/help/writing/link-rendered.png)
+### Authenticating with a {% data variables.product.prodname_github_app %}
+
+If you want to use the API on behalf of an organization or another user, GitHub recommends that you use a {% data variables.product.prodname_github_app %}. To authenticate as a {% data variables.product.prodname_github_app %} , you must first generate a private key in PEM format. Then, you must use this key to sign a JSON Web Token (JWT). You can use the JSON Web Token to request an installation token from {% data variables.product.company_short %} that you can use to authenticate to the GraphQL API. For more information, see "[Creating a GitHub App](/developers/apps/building-github-apps/creating-a-github-app)", "[Authenticating with GitHub Apps](/developers/apps/building-github-apps/authenticating-with-github-apps), and "[Identifying and authorizing users for GitHub Apps](/developers/apps/building-github-apps/identifying-and-authorizing-users-for-github-apps)."
+
+### Authenticating with a {% data variables.product.prodname_oauth_app %}
+
+To authenticate with an OAuth token from an {% data variables.product.prodname_oauth_app %}, you must first authorize your {% data variables.product.prodname_oauth_app %} using either a web application flow or device flow. Then, you can use the access token that you received to access the API. For more information, see "[Creating an OAuth App](/apps/building-oauth-apps/creating-an-oauth-app)" and " [Authorizing OAuth Apps](/apps/building-oauth-apps/authorizing-oauth-apps)."
+
+## The GraphQL endpoint
+
+The REST API has numerous endpoints; the GraphQL API has a single endpoint:
+
+<pre>{% data variables.product.graphql_url_pre %}</pre>
+
+The endpoint remains constant no matter what operation you perform.
+
+## Communicating with GraphQL
+
+Because GraphQL operations consist of multiline JSON, GitHub recommends using the [Explorer](/graphql/guides/using-the-explorer) to make GraphQL calls. You can also use `curl` or any other HTTP-speaking library.
+
+In REST, [HTTP verbs](/rest#http-verbs) determine the operation performed. In GraphQL, you'll provide a JSON-encoded body whether you're performing a query or a mutation, so the HTTP verb is `POST`. The exception is an [introspection query](/graphql/guides/introduction-to-graphql#discovering-the-graphql-api), which is a simple `GET` to the endpoint. For more information on GraphQL versus REST, see "[Migrating from REST to GraphQL](/graphql/guides/migrating-from-rest-to-graphql)."
+
+To query GraphQL in a `curl` command, make a `POST` request with a JSON payload. The payload must contain a string called `query`:
+
+```shell
+curl -H "Authorization: bearer TOKEN" -X POST -d " \
+ { \
+   \"query\": \"query { viewer { login }}\" \
+ } \
+" {% data variables.product.graphql_url_code %}
+```
 
 {% tip %}
 
-**Tip:** {% data variables.product.product_name %} automatically creates links when valid URLs are written in a comment. For more information, see "[Autolinked references and URLs](/articles/autolinked-references-and-urls)."
+**Note**: The string value of `"query"` must escape newline characters or the schema will not parse it correctly. For the `POST` body, use outer double quotes and escaped inner double quotes.
 
 {% endtip %}
 
-## Section links
+### About query and mutation operations
 
-{% data reusables.repositories.section-links %}
+The two types of allowed operations in GitHub's GraphQL API are _queries_ and _mutations_. Comparing GraphQL to REST, queries operate like `GET` requests, while mutations operate like `POST`/`PATCH`/`DELETE`. The [mutation name](/graphql/reference/mutations) determines which modification is executed.
 
-## Relative links
+For information about rate limiting, see "[GraphQL resource limitations](/graphql/overview/resource-limitations)."
 
-{% data reusables.repositories.relative-links %}
+Queries and mutations share similar forms, with some important differences.
 
-## Images
+### About queries
 
-You can display an image by adding <kbd>!</kbd> and wrapping the alt text in `[ ]`. Then wrap the link for the image in parentheses `()`.
+GraphQL queries return only the data you specify. To form a query, you must specify [fields within fields](/graphql/guides/introduction-to-graphql#field) (also known as _nested subfields_) until you return only [scalars](/graphql/reference/scalars).
 
-`![This is an image](https://myoctocat.com/assets/images/base-octocat.svg)`
+Queries are structured like this:
 
-![Rendered Image](/assets/images/help/writing/image-rendered.png)
+<pre>query {
+  JSON-OBJECT-TO-RETURN
+}</pre>
 
-{% data variables.product.product_name %} supports embedding images into your issues, pull requests{% ifversion fpt or ghec %}, discussions{% endif %}, comments  and `.md` files. You can display an image from your repository, add a link to an online image, or upload an image. For more information, see "[Uploading assets](#uploading-assets)."
+For a real-world example, see "[Example query](#example-query)."
 
-{% tip %}
+### About mutations
 
-**Tip:** When you want to display an image which is in your repository, you should use relative links instead of absolute links.
+To form a mutation, you must specify three things:
 
-{% endtip %}
+1. _Mutation name_. The type of modification you want to perform.
+2. _Input object_. The data you want to send to the server, composed of _input fields_. Pass it as an argument to the mutation name.
+3. _Payload object_. The data you want to return from the server, composed of _return fields_. Pass it as the body of the mutation name.
 
-Here are some examples for using relative links to display an image.
+Mutations are structured like this:
 
-| Context | Relative Link |
-| ------ | -------- |
-| In a `.md` file on the same branch | `/assets/images/electrocat.png` |
-| In a `.md` file on another branch | `/../main/assets/images/electrocat.png` |
-| In issues, pull requests and comments of the repository | `../blob/main/assets/images/electrocat.png?raw=true` |
-| In a `.md` file in another repository | `/../../../../github/docs/blob/main/assets/images/electrocat.png` |
-| In issues, pull requests and comments of another repository | `../../../github/docs/blob/main/assets/images/electrocat.png?raw=true` |
+<pre>mutation {
+  MUTATION-NAME(input: {MUTATION-NAME-INPUT!}) {
+    MUTATION-NAME-PAYLOAD
+  }
+}</pre>
+
+The input object in this example is `MutationNameInput`, and the payload object is `MutationNamePayload`.
+
+In the [mutations](/graphql/reference/mutations) reference, the listed _input fields_ are what you pass as the input object. The listed _return fields_ are what you pass as the payload object.
+
+For a real-world example, see "[Example mutation](#example-mutation)."
+
+## Working with variables
+
+[Variables](https://graphql.github.io/learn/queries/#variables) can make queries more dynamic and powerful, and they can reduce complexity when passing mutation input objects.
 
 {% note %}
 
-**Note**: The last two relative links in the table above will work for images in a private repository only if the viewer has at least read access to the private repository which contains these images.
+**Note**: If you're using the Explorer, make sure to enter variables in the separate [Query Variables pane](/graphql/guides/using-the-explorer#using-the-variable-pane), and do not include the word `variables` before the JSON object.
 
 {% endnote %}
 
-For more information, see "[Relative Links](#relative-links)."
+Here's an example query with a single variable:
 
-{% ifversion fpt or ghec or ghes > 3.3 or ghae > 3.3 %}
-### Specifying the theme an image is shown to
-
-You can specify the theme an image is displayed for in Markdown by using the HTML `<picture>` element in combination with the `prefers-color-scheme` media feature. We distinguish between light and dark color modes, so there are two options available. You can use these options to display images optimized for dark or light backgrounds. This is particularly helpful for transparent PNG images.
-
-For example, the following code displays a sun image for light themes and a moon for dark themes:
-
-{% data reusables.getting-started.picture-element-example %}
-
-The old method of specifying images based on the theme, by using a fragment appended to the URL (`#gh-dark-mode-only` or `#gh-light-mode-only`), is deprecated and will be removed in favor of the new method described above.
-{% endif %}
-
-## Lists
-
-You can make an unordered list by preceding one or more lines of text with <kbd>-</kbd>, <kbd>*</kbd>, or <kbd>+</kbd>.
-
-```markdown
-- George Washington
-* John Adams
-+ Thomas Jefferson
+```graphql
+query($number_of_repos:Int!) {
+  viewer {
+    name
+     repositories(last: $number_of_repos) {
+       nodes {
+         name
+       }
+     }
+   }
+}
+variables {
+   "number_of_repos": 3
+}
 ```
 
-![Rendered unordered list](/assets/images/help/writing/unordered-list-rendered.png)
+There are three steps to using variables:
 
-To order your list, precede each line with a number.
+1. Define the variable outside the operation in a `variables` object:
 
-```markdown
-1. James Madison
-2. James Monroe
-3. John Quincy Adams
+  ```graphql
+  variables {
+     "number_of_repos": 3
+  }
+  ```
+
+  The object must be valid JSON. This example shows a simple `Int` variable type, but it's possible to define more complex variable types, such as input objects. You can also define multiple variables here.
+
+2. Pass the variable to the operation as an argument:
+
+  ```graphql
+  query($number_of_repos:Int!){
+  ```
+
+  The argument is a key-value pair, where the key is the _name_ starting with `$` (e.g., `$number_of_repos`), and the value is the _type_ (e.g., `Int`). Add a `!` to indicate whether the type is required. If you've defined multiple variables, include them here as multiple arguments.
+
+3. Use the variable within the operation:
+
+  ```graphql
+  repositories(last: $number_of_repos) {
+  ```
+
+  In this example, we substitute the variable for the number of repositories to retrieve. We specify a type in step 2 because GraphQL enforces strong typing.
+
+This process makes the query argument dynamic. We can now simply change the value in the `variables` object and keep the rest of the query the same.
+
+Using variables as arguments lets you dynamically update values in the `variables` object without changing the query.
+
+## Example query
+
+Let's walk through a more complex query and put this information in context.
+
+The following query looks up the `octocat/Hello-World` repository, finds the 20 most recent closed issues, and returns each issue's title, URL, and first 5 labels:
+
+```graphql
+query {
+  repository(owner:"octocat", name:"Hello-World") {
+    issues(last:20, states:CLOSED) {
+      edges {
+        node {
+          title
+          url
+          labels(first:5) {
+            edges {
+              node {
+                name
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
 ```
 
-![Rendered ordered list](/assets/images/help/writing/ordered-list-rendered.png)
+Looking at the composition line by line:
 
-### Nested Lists
+* `query {`
 
-You can create a nested list by indenting one or more list items below another item.
+  Because we want to read data from the server, not modify it, `query` is the root operation. (If you don't specify an operation, `query` is also the default.)
 
-To create a nested list using the web editor on {% data variables.product.product_name %} or a text editor that uses a monospaced font, like [{% data variables.product.prodname_vscode %}](https://code.visualstudio.com/), you can align your list visually. Type space characters in front of your nested list item, until the list marker character (<kbd>-</kbd> or <kbd>*</kbd>) lies directly below the first character of the text in the item above it.
+* `repository(owner:"octocat", name:"Hello-World") {`
 
-```markdown
-1. First list item
-   - First nested list item
-     - Second nested list item
+  To begin the query, we want to find a [`repository`](/graphql/reference/objects#repository) object. The schema validation indicates this object requires an `owner` and a `name` argument.
+
+* `issues(last:20, states:CLOSED) {`
+
+  To account for all issues in the repository, we call the `issues` object. (We _could_ query a single `issue` on a `repository`, but that would require us to know the number of the issue we want to return and provide it as an argument.)
+
+  Some details about the `issues` object:
+
+  - The [docs](/graphql/reference/objects#repository) tell us this object has the type `IssueConnection`.
+  - Schema validation indicates this object requires a `last` or `first` number of results as an argument, so we provide `20`.
+  - The [docs](/graphql/reference/objects#repository) also tell us this object accepts a `states` argument, which is an  [`IssueState`](/graphql/reference/enums#issuestate) enum that accepts `OPEN` or `CLOSED` values. To find only closed issues, we give the `states` key a value of `CLOSED`.
+
+* `edges {`
+
+  We know `issues` is a connection because it has the `IssueConnection` type. To retrieve data about individual issues, we have to access the node via `edges`.
+
+* `node {`
+
+  Here we retrieve the node at the end of the edge. The [`IssueConnection` docs](/graphql/reference/objects#issueconnection) indicate the node at the end of the `IssueConnection` type is an `Issue` object.
+
+* Now that we know we're retrieving an `Issue` object, we can look at the [docs](/graphql/reference/objects#issue) and specify the fields we want to return:
+
+  ```graphql
+  title
+  url
+  labels(first:5) {
+    edges {
+      node {
+        name
+      }
+    }
+  }
+  ```
+
+  Here we specify the `title`, `url`, and `labels` fields of the `Issue` object.
+
+  The `labels` field has the type [`LabelConnection`](/graphql/reference/objects#labelconnection). As with the `issues` object, because `labels` is a connection, we must travel its edges to a connected node: the `label` object. At the node, we can specify the `label` object fields we want to return, in this case, `name`.
+
+You may notice that running this query on the Octocat's {% ifversion not ghae %}public{% endif %} `Hello-World` repository won't return many labels. Try running it on one of your own repositories that does use labels, and you'll likely see a difference.
+
+## Example mutation
+
+Mutations often require information that you can only find out by performing a query first. This example shows two operations:
+
+1. A query to get an issue ID.
+2. A mutation to add an emoji reaction to the issue.
+
+```graphql
+query FindIssueID {
+  repository(owner:"octocat", name:"Hello-World") {
+    issue(number:349) {
+      id
+    }
+  }
+}
+
+mutation AddReactionToIssue {
+  addReaction(input:{subjectId:"MDU6SXNzdWUyMzEzOTE1NTE=",content:HOORAY}) {
+    reaction {
+      content
+    }
+    subject {
+      id
+    }
+  }
+}
 ```
 
 {% tip %}
 
-**Note**: In the web-based editor, you can indent or dedent one or more lines of text by first highlighting the desired lines and then using <kbd>Tab</kbd> or <kbd>Shift</kbd>+<kbd>Tab</kbd> respectively.
+Although you can include a query and a mutation in the same Explorer window if you give them names (`FindIssueID` and `AddReactionToIssue` in this example), the operations will be executed as separate calls to the GraphQL endpoint. It's not possible to perform a query at the same time as a mutation, or vice versa.
 
 {% endtip %}
 
-![Nested list with alignment highlighted](/assets/images/help/writing/nested-list-alignment.png)
+Let's walk through the example. The task sounds simple: add an emoji reaction to an issue.
 
-![List with two levels of nested items](/assets/images/help/writing/nested-list-example-1.png)
+So how do we know to begin with a query? We don't, yet.
 
-To create a nested list in the comment editor on {% data variables.product.product_name %}, which doesn't use a monospaced font, you can look at the list item immediately above the nested list and count the number of characters that appear before the content of the item. Then type that number of space characters in front of the nested list item.
+Because we want to modify data on the server (attach an emoji to an issue), we begin by searching the schema for a helpful mutation. The reference docs show the [`addReaction`](/graphql/reference/mutations#addreaction) mutation, with this description: `Adds a reaction to a subject.` Perfect!
 
-In this example, you could add a nested list item under the list item `100. First list item` by indenting the nested list item a minimum of five spaces, since there are five characters (`100. `) before `First list item`.
+The docs for the mutation list three input fields:
 
-```markdown
-100. First list item
-     - First nested list item
+* `clientMutationId` (`String`)
+* `subjectId` (`ID!`)
+* `content` (`ReactionContent!`)
+
+The `!`s indicate that `subjectId` and `content` are required fields. A required `content` makes sense: we want to add a reaction, so we'll need to specify which emoji to use.
+
+But why is `subjectId` required? It's because the `subjectId` is the only way to identify _which_ issue in _which_ repository to react to.
+
+This is why we start this example with a query: to get the `ID`.
+
+Let's examine the query line by line:
+
+* `query FindIssueID {`
+
+  Here we're performing a query, and we name it `FindIssueID`. Note that naming a query is optional; we give it a name here so that we can include it in same Explorer window as the mutation.
+
+* `repository(owner:"octocat", name:"Hello-World") {`
+
+  We specify the repository by querying the `repository` object and passing `owner` and `name` arguments.
+
+* `issue(number:349) {`
+
+  We specify the issue to react to by querying the `issue` object and passing a `number` argument.
+
+* `id`
+
+  This is where we retrieve the `id` of `https://github.com/octocat/Hello-World/issues/349` to pass as the `subjectId`.
+
+When we run the query, we get the `id`: `MDU6SXNzdWUyMzEzOTE1NTE=`
+
+{% tip %}
+
+**Note**: The `id` returned in the query is the value we'll pass as the `subjectID` in the mutation. Neither the docs nor schema introspection will indicate this relationship; you'll need to understand the concepts behind the names to figure this out.
+
+{% endtip %}
+
+With the ID known, we can proceed with the mutation:
+
+* `mutation AddReactionToIssue {`
+
+  Here we're performing a mutation, and we name it `AddReactionToIssue`. As with queries, naming a mutation is optional; we give it a name here so we can include it in the same Explorer window as the query.
+
+* `addReaction(input:{subjectId:"MDU6SXNzdWUyMzEzOTE1NTE=",content:HOORAY}) {`
+
+  Let's examine this line:
+
+  - `addReaction` is the name of the mutation.
+  - `input` is the required argument key. This will always be `input` for a mutation.
+  - `{subjectId:"MDU6SXNzdWUyMzEzOTE1NTE=",content:HOORAY}` is the required argument value. This will always be an [input object](/graphql/reference/input-objects) (hence the curly braces) composed of input fields (`subjectId` and `content` in this case) for a mutation.
+
+  How do we know which value to use for the content? The [`addReaction` docs](/graphql/reference/mutations#addreaction) tell us the `content` field has the type [`ReactionContent`](/graphql/reference/enums#reactioncontent), which is an [enum](/graphql/reference/enums) because only certain emoji reactions are supported on GitHub issues. These are the allowed values for reactions (note some values differ from their corresponding emoji names):
+
+  {% data reusables.repositories.reaction_list %}
+
+* The rest of the call is composed of the payload object. This is where we specify the data we want the server to return after we've performed the mutation. These lines come from the [`addReaction` docs](/graphql/reference/mutations#addreaction), which three possible return fields:
+
+    - `clientMutationId` (`String`)
+    - `reaction` (`Reaction!`)
+    - `subject` (`Reactable!`)
+
+  In this example, we return the two required fields (`reaction` and `subject`), both of which have required subfields (respectively, `content` and `id`).
+
+When we run the mutation, this is the response:
+
+```json
+{
+  "data": {
+    "addReaction": {
+      "reaction": {
+        "content": "HOORAY"
+      },
+      "subject": {
+        "id": "MDU6SXNzdWUyMTc5NTQ0OTc="
+      }
+    }
+  }
+}
 ```
 
-![List with a nested list item](/assets/images/help/writing/nested-list-example-3.png)   
+That's it! Check out your [reaction to the issue](https://github.com/octocat/Hello-World/issues/349) by hovering over the :tada: to find your username.
 
-You can create multiple levels of nested lists using the same method. For example, because the first nested list item has seven characters (`␣␣␣␣␣-␣`) before the nested list content `First nested list item`, you would need to indent the second nested list item by seven spaces.
+One final note: when you pass multiple fields in an input object, the syntax can get unwieldy. Moving the fields into a [variable](#working-with-variables) can help. Here's how you could rewrite the original mutation using a variable:
 
-```markdown
-100. First list item
-     - First nested list item
-       - Second nested list item
+```graphql
+mutation($myVar:AddReactionInput!) {
+  addReaction(input:$myVar) {
+    reaction {
+      content
+    }
+    subject {
+      id
+    }
+  }
+}
+variables {
+  "myVar": {
+    "subjectId":"MDU6SXNzdWUyMTc5NTQ0OTc=",
+    "content":"HOORAY"
+  }
+}
 ```
-
-![List with two levels of nested items](/assets/images/help/writing/nested-list-example-2.png)    
-
-For more examples, see the [GitHub Flavored Markdown Spec](https://github.github.com/gfm/#example-265).
-
-## Task lists
-
-{% data reusables.repositories.task-list-markdown %}
-
-If a task list item description begins with a parenthesis, you'll need to escape it with <kbd>\\</kbd>:
-
-`- [ ] \(Optional) Open a followup issue`
-
-For more information, see "[About task lists](/articles/about-task-lists)."
-
-## Mentioning people and teams
-
-You can mention a person or [team](/articles/setting-up-teams/) on {% data variables.product.product_name %} by typing <kbd>@</kbd> plus their username or team name. This will trigger a notification and bring their attention to the conversation. People will also receive a notification if you edit a comment to mention their username or team name. For more information about notifications, see "[About notifications](/github/managing-subscriptions-and-notifications-on-github/about-notifications)."
 
 {% note %}
 
-**Note:** A person will only be notified about a mention if the person has read access to the repository and, if the repository is owned by an organization, the person is a member of the organization.
+You may notice that the `content` field value in the earlier example (where it's used directly in the mutation) does not have quotes around `HOORAY`, but it does have quotes when used in the variable. There's a reason for this:
+* When you use `content` directly in the mutation, the schema expects the value to be of type [`ReactionContent`](/graphql/reference/enums#reactioncontent), which is an _enum_, not a string. Schema validation will throw an error if you add quotes around the enum value, as quotes are reserved for strings.
+* When you use `content` in a variable, the variables section must be valid JSON, so the quotes are required. Schema validation correctly interprets the `ReactionContent` type when the variable is passed into the mutation during execution.
+
+For more information on the difference between enums and strings, see the [official GraphQL spec](https://graphql.github.io/graphql-spec/June2018/#sec-Enums).
 
 {% endnote %}
-
-`@github/support What do you think about these updates?`
-
-![Rendered @mention](/assets/images/help/writing/mention-rendered.png)
-
-When you mention a parent team, members of its child teams also receive notifications, simplifying communication with multiple groups of people. For more information, see "[About teams](/articles/about-teams)."
-
-Typing an <kbd>@</kbd> symbol will bring up a list of people or teams on a project. The list filters as you type, so once you find the name of the person or team you are looking for, you can use the arrow keys to select it and press either tab or enter to complete the name. For teams, enter the @organization/team-name and all members of that team will get subscribed to the conversation.
-
-The autocomplete results are restricted to repository collaborators and any other participants on the thread.
-
-## Referencing issues and pull requests
-
-You can bring up a list of suggested issues and pull requests within the repository by typing <kbd>#</kbd>. Type the issue or pull request number or title to filter the list, and then press either tab or enter to complete the highlighted result.
-
-For more information, see "[Autolinked references and URLs](/articles/autolinked-references-and-urls)."
-
-## Referencing external resources
-
-{% data reusables.repositories.autolink-references %}
-
-{% ifversion ghes < 3.4 %}
-## Content attachments
-
-Some {% data variables.product.prodname_github_apps %} provide information in {% data variables.product.product_name %} for URLs that link to their registered domains. {% data variables.product.product_name %} renders the information provided by the app under the URL in the body or comment of an issue or pull request.
-
-![Content attachment](/assets/images/github-apps/content_reference_attachment.png)
-
-To see content attachments, you must have a {% data variables.product.prodname_github_app %} that uses the Content Attachments API installed on the repository.{% ifversion fpt or ghec %} For more information, see "[Installing an app in your personal account](/articles/installing-an-app-in-your-personal-account)" and "[Installing an app in your organization](/articles/installing-an-app-in-your-organization)."{% endif %}
-
-Content attachments will not be displayed for URLs that are part of a markdown link.
-
-For more information about building a {% data variables.product.prodname_github_app %} that uses content attachments, see "[Using Content Attachments](/apps/using-content-attachments)."{% endif %}
-
-## Uploading assets
-
-You can upload assets like images by dragging and dropping, selecting from a file browser, or pasting. You can upload assets to issues, pull requests, comments, and `.md` files in your repository.
-
-## Using emoji
-
-You can add emoji to your writing by typing `:EMOJICODE:`.
-
-`@octocat :+1: This PR looks great - it's ready to merge! :shipit:`
-
-![Rendered emoji](/assets/images/help/writing/emoji-rendered.png)
-
-Typing <kbd>:</kbd> will bring up a list of suggested emoji. The list will filter as you type, so once you find the emoji you're looking for, press **Tab** or **Enter** to complete the highlighted result.
-
-For a full list of available emoji and codes, check out [the Emoji-Cheat-Sheet](https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md).
-
-## Paragraphs
-
-You can create a new paragraph by leaving a blank line between lines of text.
-
-## Footnotes
-
-You can add footnotes to your content by using this bracket syntax:
-
-```
-Here is a simple footnote[^1].
-
-A footnote can also have multiple lines[^2].  
-
-You can also use words, to fit your writing style more closely[^note].
-
-[^1]: My reference.
-[^2]: Every new line should be prefixed with 2 spaces.  
-  This allows you to have a footnote with multiple lines.
-[^note]:
-    Named footnotes will still render with numbers instead of the text but allow easier identification and linking.  
-    This footnote also has been made with a different syntax using 4 spaces for new lines.
-```
-
-The footnote will render like this:
-
-![Rendered footnote](/assets/images/site/rendered-footnote.png)
-
-{% tip %}
-
-**Note**: The position of a footnote in your Markdown does not influence where the footnote will be rendered. You can write a footnote right after your reference to the footnote, and the footnote will still render at the bottom of the Markdown.
-
-Footnotes are not supported in wikis.
-
-{% endtip %}
-
-## Hiding content with comments
-
-You can tell {% data variables.product.product_name %} to hide content from the rendered Markdown by placing the content in an HTML comment.
-
-<pre>
-&lt;!-- This content will not appear in the rendered Markdown --&gt;
-</pre>
-
-## Ignoring Markdown formatting
-
-You can tell {% data variables.product.product_name %} to ignore (or escape) Markdown formatting by using <kbd>\\</kbd> before the Markdown character.
-
-`Let's rename \*our-new-project\* to \*our-old-project\*.`
-
-![Rendered escaped character](/assets/images/help/writing/escaped-character-rendered.png)
-
-For more information, see Daring Fireball's "[Markdown Syntax](https://daringfireball.net/projects/markdown/syntax#backslash)."
-
-## Disabling Markdown rendering
-
-{% data reusables.repositories.disabling-markdown-rendering %}
 
 ## Further reading
 
-- [{% data variables.product.prodname_dotcom %} Flavored Markdown Spec](https://github.github.com/gfm/)
-- "[About writing and formatting on GitHub](/articles/about-writing-and-formatting-on-github)"
-- "[Working with advanced formatting](/articles/working-with-advanced-formatting)"
-- "[Quickstart for writing on {% data variables.product.prodname_dotcom %}](/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/quickstart-for-writing-on-github)"
+There is a _lot_ more you can do when forming GraphQL calls. Here are some places to look next:
+
+* [Pagination](https://graphql.org/learn/pagination/)
+* [Fragments](https://graphql.org/learn/queries/#fragments)
+* [Inline fragments](https://graphql.org/learn/queries/#inline-fragments)
+* [Directives](https://graphql.org/learn/queries/#directives)
